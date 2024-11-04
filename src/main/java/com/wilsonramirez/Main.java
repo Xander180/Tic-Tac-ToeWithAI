@@ -65,6 +65,10 @@ public class Main {
                             Alert.Information(3, "medium");
                             yield AI.mediumDifficulty(field, currentPlayer, 1);
                         }
+                        case "hard" -> {
+                            Alert.Information(3, "hard");
+                            yield AI.hardDifficulty(field, currentPlayer);
+                        }
                         default -> input;
                     };
                 if (Field.isValid(field, input, currentPlayer)) {
@@ -95,8 +99,10 @@ public class Main {
     public static boolean checkParameters(String[] parameters) {
         if (parameters.length == 3) {
             if (parameters[0].equals("start")) {
-                return (parameters[1].equals("user") || parameters[1].equals("easy") || parameters[1].equals("medium"))
-                        && (parameters[2].equals("user") || parameters[2].equals("easy") || parameters[2].equals("medium"));
+                if ((parameters[1].equals("user") || parameters[1].equals("easy") || parameters[1].equals("medium") || parameters[1].equals("hard"))
+                        && (parameters[2].equals("user") || parameters[2].equals("easy") || parameters[2].equals("medium") || parameters[2].equals("hard"))) {
+                    return true;
+                }
             }
         }
         Alert.Error(1);

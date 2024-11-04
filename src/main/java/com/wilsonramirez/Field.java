@@ -11,10 +11,10 @@ public class Field {
      */
     public static void printField(int[][] field) {
         System.out.println("---------");
-        for (int i = 0; i < field.length; i++) {
+        for (int[] ints : field) {
             System.out.print("| ");
-            for (int j = 0; j < field[i].length; j++) {
-                switch (field[i][j]) {
+            for (int anInt : ints) {
+                switch (anInt) {
                     case 0:
                         System.out.print("  ");
                         break;
@@ -53,6 +53,8 @@ public class Field {
                 || (field[1][0] == player && field[1][1] == player && field[1][2] == player)
                 || (field[2][0] == player && field[2][1] == player && field[2][2] == player)
                 || (field[0][0] == player && field[1][0] == player && field[2][0] == player)
+                || (field[0][1] == player && field[1][1] == player && field[2][1] == player)
+                || (field[0][2] == player && field[1][2] == player && field[2][2] == player)
                 || (field[0][0] == player && field[1][1] == player && field[2][2] == player)
                 || (field[0][2] == player && field[1][1] == player && field[2][0] == player);
     }
@@ -63,9 +65,9 @@ public class Field {
      * @return True if all cells are filled, else false
      */
     public static boolean checkFilledField(int[][] field) {
-        for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field[i].length; j++) {
-                if (field[i][j] == 0) {
+        for (int[] ints : field) {
+            for (int anInt : ints) {
+                if (anInt == 0) {
                     return false;
                 }
             }

@@ -115,4 +115,81 @@ public class AI {
         // Reverts to picking a random location if win/block attempts fail
         return easyDifficulty();
     }
+
+    /**
+     * Almost impossible to win against
+     * Uses a minimax algorithm to determine the best possible next move in order to win or to draw
+     * @param field Game field
+     * @param player AI player
+     * @return Appropriate set of coordinates based on current conditions
+     */
+    public static String hardDifficulty(int[][] field, int player) {
+        int bestScore = Integer.MIN_VALUE;
+        int[] bestMove = new int[0];
+        int otherPlayer = player == 1 ? 2 : 1;
+
+        if (field[1][1] == 0) {
+            return 2 + " " + 2;
+        }
+
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field[i].length; j++) {
+                if (field[i][j] == 0) {
+                    Field.setCell(field, j, i, player);
+                    int score = minimax(field, player, otherPlayer, 0, false);
+                    Field.setCell(field, j, i, 0);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = new int[]{i, j};
+                    }
+                }
+            }
+        }
+        return (bestMove[0] + 1) + " " + (bestMove[1] + 1);
+    }
+
+    /**
+     * Recursive algorithm to determine the best possible next move
+     * @param field Current field with temporary placements
+     * @param player Primary player making the move
+     * @param otherPlayer Opponent player
+     * @param depth How deep the recursive algorithm has gone
+     * @param isMaximizing If maximizing, find the best possible move to win, else try to block
+     * @return Best score based on possible future moves
+     */
+    private static int minimax(int[][] field, int player, int otherPlayer, int depth, boolean isMaximizing) {
+        if (Field.checkMatchingRow(field, player)) {
+            return 10 - depth;
+        } else if (Field.checkMatchingRow(field, otherPlayer)) {
+            return depth - 10;
+        } else if (Field.checkFilledField(field)) {
+            return 0;
+        }
+
+        int bestScore;
+        if (isMaximizing) {
+            bestScore = Integer.MIN_VALUE;
+            for (int i = 0; i < field.length; i++) {
+                for (int j = 0; j < field[i].length; j++) {
+                    if (field[i][j] == 0) {
+                        Field.setCell(field, j, i, player);
+                        bestScore = Math.max(bestScore, minimax(field, player, otherPlayer, depth++, false));
+                        Field.setCell(field, j, i, 0);
+                    }
+                }
+            }
+        } else {
+            bestScore = Integer.MAX_VALUE;
+            for (int i = 0; i < field.length; i++) {
+                for (int j = 0; j < field[i].length; j++) {
+                    if (field[i][j] == 0) {
+                        Field.setCell(field, j, i, otherPlayer);
+                        bestScore = Math.min(bestScore, minimax(field, player, otherPlayer, depth++, true));
+                        Field.setCell(field, j, i, 0);
+                    }
+                }
+            }
+        }
+        return bestScore;
+    }
 }
