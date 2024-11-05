@@ -167,26 +167,14 @@ public class AI {
         }
 
         int bestScore;
-        if (isMaximizing) {
-            bestScore = Integer.MIN_VALUE;
-            for (int i = 0; i < field.length; i++) {
-                for (int j = 0; j < field[i].length; j++) {
-                    if (field[i][j] == 0) {
-                        Field.setCell(field, j, i, player);
-                        bestScore = Math.max(bestScore, minimax(field, player, otherPlayer, depth++, false));
-                        Field.setCell(field, j, i, 0);
-                    }
-                }
-            }
-        } else {
-            bestScore = Integer.MAX_VALUE;
-            for (int i = 0; i < field.length; i++) {
-                for (int j = 0; j < field[i].length; j++) {
-                    if (field[i][j] == 0) {
-                        Field.setCell(field, j, i, otherPlayer);
-                        bestScore = Math.min(bestScore, minimax(field, player, otherPlayer, depth++, true));
-                        Field.setCell(field, j, i, 0);
-                    }
+        bestScore = isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field[i].length; j++) {
+                if (field[i][j] == 0) {
+                    Field.setCell(field, j, i, isMaximizing ? player : otherPlayer);
+                    bestScore = isMaximizing ? Math.max(bestScore, minimax(field, player, otherPlayer, depth++, false))
+                            : Math.min(bestScore, minimax(field, player, otherPlayer, depth++, true));
+                    Field.setCell(field, j, i, 0);
                 }
             }
         }
